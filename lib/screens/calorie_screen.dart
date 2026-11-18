@@ -215,7 +215,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                               SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                  'Người dùng tự tìm kiếm calo món ăn trên google',
+                                  'Tra cứu calo món ăn trên Google',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -464,7 +464,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
           const SizedBox(width: 8),
           const Expanded(
             child: Text(
-              'Người dùng tự tìm kiếm calo món ăn trên google',
+              'Tra cứu calo món ăn trên Google',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -521,7 +521,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                     controller: _searchController,
                     onSubmitted: (_) => _triggerSearch(),
                     decoration: InputDecoration(
-                      hintText: 'Tìm món (vd: Phở, Chicken, Salad...)',
+                      hintText: 'Tìm món (vd: Phở, Cơm, Salad...)',
                       prefixIcon: const Icon(Icons.restaurant_menu),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),

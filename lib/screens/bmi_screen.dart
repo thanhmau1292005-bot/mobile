@@ -210,7 +210,7 @@ class _BmiScreenState extends State<BmiScreen> {
                 onPressed: _calculateBmi,
                 icon: const Icon(Icons.analytics_outlined),
                 label: const Text(
-                  'TÍNH CHỈ SỐ BMI & LƯU ĐÁM MÂY',
+                  'TÍNH CHỈ SỐ BMI & LƯU LỊCH SỬ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -405,7 +405,7 @@ class _BmiScreenState extends State<BmiScreen> {
                           SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'Lịch Sử Đo BMI (Realtime Stream)',
+                              'Lịch Sử Đo BMI',
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                               overflow: TextOverflow.ellipsis,
                             ),

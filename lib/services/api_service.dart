@@ -9,7 +9,7 @@ class ApiService {
   static final List<FoodCalorieItem> _customUserFoods = [
     FoodCalorieItem(
       id: 990001,
-      name: 'Phở Bò Bái Đao',
+      name: 'Phở Bò Gia Truyền',
       caloriesPerServing: 450,
       prepTimeMinutes: 15,
       servings: 1,
