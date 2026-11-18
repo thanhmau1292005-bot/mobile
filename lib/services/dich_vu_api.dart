@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/workout_model.dart';
+import '../models/mo_hinh_tap_luyen.dart';
 
-class ApiService {
+class DichVuApi {
   static const String _baseUrl = 'https://dummyjson.com/recipes';
 
   // Danh sách các món ăn do người dùng tự thêm
-  static final List<FoodCalorieItem> _customUserFoods = [
-    FoodCalorieItem(
+  static final List<MonAnCaloItem> _customUserFoods = [
+    MonAnCaloItem(
       id: 990001,
       name: 'Phở Bò Gia Truyền',
       caloriesPerServing: 450,
@@ -16,7 +16,7 @@ class ApiService {
       cuisine: 'Việt Nam',
       image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=500',
     ),
-    FoodCalorieItem(
+    MonAnCaloItem(
       id: 990002,
       name: 'Cơm Tấm Sườn Bì Chả',
       caloriesPerServing: 620,
@@ -28,7 +28,7 @@ class ApiService {
   ];
 
   // Thêm món ăn mới do người dùng tự nhập
-  static void addCustomFood(FoodCalorieItem item) {
+  static void addCustomFood(MonAnCaloItem item) {
     _customUserFoods.insert(0, item);
   }
 
@@ -40,7 +40,7 @@ class ApiService {
   }
 
   // HTTP GET: Truy vấn danh sách món ăn REST API kết hợp món người dùng tự thêm
-  static Future<List<FoodCalorieItem>> fetchFoodCalories({String query = ''}) async {
+  static Future<List<MonAnCaloItem>> fetchFoodCalories({String query = ''}) async {
     final cleanQuery = query.trim().toLowerCase();
 
     // Lọc các món người dùng tự nhập theo từ khóa
@@ -50,7 +50,7 @@ class ApiService {
           item.cuisine.toLowerCase().contains(cleanQuery);
     }).toList();
 
-    List<FoodCalorieItem> apiFoods = [];
+    List<MonAnCaloItem> apiFoods = [];
 
     try {
       final String endpoint = cleanQuery.isEmpty
@@ -65,19 +65,19 @@ class ApiService {
         final Map<String, dynamic> decoded = jsonDecode(response.body);
         final List<dynamic> list = decoded['recipes'] ?? [];
         apiFoods = list
-            .map((item) => FoodCalorieItem.fromJson(Map<String, dynamic>.from(item)))
+            .map((item) => MonAnCaloItem.fromJson(Map<String, dynamic>.from(item)))
             .toList();
       }
     } catch (_) {
-      // Khi mất mạng hoặc API bị lỗi, vẫn giữ lại các món tự nhập & món offline
+      // Khi mất mạng hoặc API bị lỗi, vẫn giữ lại các món tự nhập & món ngoại tuyến
     }
 
     // Kết hợp món tự nhập lên đầu danh sách + kết quả REST API
     return [...matchedCustom, ...apiFoods];
   }
 
-  // HTTP POST: Gửi món ăn đã chọn lên Server REST API để lập kế hoạch ăn uống
-  static Future<bool> addFoodToMealPlanServer(FoodCalorieItem item) async {
+  // HTTP POST: Gửi món ăn đã chọn lên Máy chủ API để lập kế hoạch ăn uống
+  static Future<bool> addFoodToMealPlanServer(MonAnCaloItem item) async {
     try {
       final response = await http.post(
         Uri.parse('$_baseUrl/add'),
@@ -94,3 +94,6 @@ class ApiService {
     }
   }
 }
+
+// Tên tương thích cũ
+typedef ApiService = DichVuApi;

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import '../models/workout_model.dart';
-import '../services/database_helper.dart';
+import '../models/mo_hinh_tap_luyen.dart';
+import '../services/co_so_du_lieu_helper.dart';
 
-class WorkoutScreen extends StatefulWidget {
-  const WorkoutScreen({super.key});
+class ManHinhNhatKyTap extends StatefulWidget {
+  const ManHinhNhatKyTap({super.key});
 
   @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
+  State<ManHinhNhatKyTap> createState() => _ManHinhNhatKyTapState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
-  List<WorkoutItem> _workouts = [];
+// Tên tương thích cũ
+typedef WorkoutScreen = ManHinhNhatKyTap;
+
+class _ManHinhNhatKyTapState extends State<ManHinhNhatKyTap> {
+  List<BaiTapItem> _workouts = [];
   bool _isLoading = true;
   String _searchText = '';
   final _searchController = TextEditingController();
@@ -24,7 +27,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   Future<void> _refreshWorkouts() async {
     setState(() => _isLoading = true);
     try {
-      final data = await DatabaseHelper.instance.readAllWorkouts();
+      final data = await CoSoDuLieuHelper.instance.readAllWorkouts();
       if (mounted) {
         setState(() {
           _workouts = data;
@@ -38,7 +41,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     }
   }
 
-  void _openWorkoutForm({WorkoutItem? existing}) {
+  void _openWorkoutForm({BaiTapItem? existing}) {
     final nameCtrl = TextEditingController(text: existing?.name ?? '');
     final setsCtrl = TextEditingController(text: existing?.sets.toString() ?? '3');
     final repsCtrl = TextEditingController(text: existing?.reps.toString() ?? '12');
@@ -143,7 +146,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   onPressed: () async {
                     if (!formKey.currentState!.validate()) return;
                     try {
-                      final item = WorkoutItem(
+                      final item = BaiTapItem(
                         id: existing?.id,
                         name: nameCtrl.text.trim(),
                         sets: int.parse(setsCtrl.text.trim()),
@@ -153,9 +156,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                             DateTime.now().toString().substring(0, 16),
                       );
                       if (existing == null) {
-                        await DatabaseHelper.instance.createWorkout(item);
+                        await CoSoDuLieuHelper.instance.createWorkout(item);
                       } else {
-                        await DatabaseHelper.instance.updateWorkout(item);
+                        await CoSoDuLieuHelper.instance.updateWorkout(item);
                       }
                       if (ctx.mounted) Navigator.pop(ctx);
                       _refreshWorkouts();
@@ -192,7 +195,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  Future<void> _confirmDelete(WorkoutItem item) async {
+  Future<void> _confirmDelete(BaiTapItem item) async {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -210,7 +213,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             ),
             onPressed: () async {
               Navigator.pop(ctx);
-              await DatabaseHelper.instance.deleteWorkout(item.id!);
+              await CoSoDuLieuHelper.instance.deleteWorkout(item.id!);
               _refreshWorkouts();
             },
             child: const Text('Xóa'),

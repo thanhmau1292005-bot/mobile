@@ -1,18 +1,18 @@
-
-
-
 import 'package:flutter/material.dart';
-import '../models/workout_model.dart';
-import '../services/bmi_service.dart';
+import '../models/mo_hinh_tap_luyen.dart';
+import '../services/dich_vu_bmi.dart';
 
-class BmiScreen extends StatefulWidget {
-  const BmiScreen({super.key});
+class ManHinhBmi extends StatefulWidget {
+  const ManHinhBmi({super.key});
 
   @override
-  State<BmiScreen> createState() => _BmiScreenState();
+  State<ManHinhBmi> createState() => _ManHinhBmiState();
 }
 
-class _BmiScreenState extends State<BmiScreen> {
+// Tên tương thích cũ
+typedef BmiScreen = ManHinhBmi;
+
+class _ManHinhBmiState extends State<ManHinhBmi> {
   final _formKey = GlobalKey<FormState>();
   final _heightController = TextEditingController(text: '170');
   final _weightController = TextEditingController(text: '65');
@@ -64,8 +64,8 @@ class _BmiScreenState extends State<BmiScreen> {
       _statusColor = color;
     });
 
-    BmiService.instance.saveBmiRecord(
-      BmiRecord(
+    DichVuBmi.instance.saveBmiRecord(
+      BanGhiBmi(
         bmi: double.parse(bmi.toStringAsFixed(1)),
         status: category,
         heightCm: heightCm,
@@ -366,7 +366,7 @@ class _BmiScreenState extends State<BmiScreen> {
               foregroundColor: Colors.white,
             ),
             onPressed: () {
-              BmiService.instance.clearBmiRecords();
+              DichVuBmi.instance.clearBmiRecords();
               Navigator.of(ctx).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -388,8 +388,8 @@ class _BmiScreenState extends State<BmiScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: StreamBuilder<List<BmiRecord>>(
-          stream: BmiService.instance.watchBmiRecords(),
+        child: StreamBuilder<List<BanGhiBmi>>(
+          stream: DichVuBmi.instance.watchBmiRecords(),
           builder: (context, snapshot) {
             final records = snapshot.data ?? [];
             return Column(
@@ -463,7 +463,7 @@ class _BmiScreenState extends State<BmiScreen> {
                           icon: const Icon(Icons.delete_outline, size: 20, color: Colors.grey),
                           tooltip: 'Xóa bản ghi này',
                           onPressed: () {
-                            BmiService.instance.removeBmiRecordAt(i);
+                            DichVuBmi.instance.removeBmiRecordAt(i);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Đã xóa bản ghi BMI.'),

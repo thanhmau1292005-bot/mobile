@@ -3,24 +3,24 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import '../models/workout_model.dart';
+import '../models/mo_hinh_tap_luyen.dart';
 
-class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._init();
+class CoSoDuLieuHelper {
+  static final CoSoDuLieuHelper instance = CoSoDuLieuHelper._init();
   static Database? _database;
   bool _useLocalFallback = false;
 
-  final List<WorkoutItem> _localWorkouts = [];
+  final List<BaiTapItem> _localWorkouts = [];
   int _localNextId = 1;
 
-  DatabaseHelper._init() {
+  CoSoDuLieuHelper._init() {
     _initLocalPresets();
   }
 
   void _initLocalPresets() {
     final now = DateTime.now().toString().substring(0, 16);
     _localWorkouts.addAll([
-      WorkoutItem(
+      BaiTapItem(
         id: _localNextId++,
         name: 'Hít đất cơ ngực (Push-ups)',
         sets: 4,
@@ -28,7 +28,7 @@ class DatabaseHelper {
         calories: 120,
         createdAt: now,
       ),
-      WorkoutItem(
+      BaiTapItem(
         id: _localNextId++,
         name: 'Gánh đùi mông (Squats)',
         sets: 4,
@@ -36,7 +36,7 @@ class DatabaseHelper {
         calories: 180,
         createdAt: now,
       ),
-      WorkoutItem(
+      BaiTapItem(
         id: _localNextId++,
         name: 'Chạy bộ đốt mỡ (Cardio)',
         sets: 1,
@@ -54,7 +54,7 @@ class DatabaseHelper {
       _database = await _initDB('health_workout_v1.db');
       return _database;
     } catch (e) {
-      debugPrint('SQLite initialization error, switching to local memory storage: $e');
+      debugPrint('Lỗi khởi tạo SQLite, chuyển sang bộ nhớ cục bộ: $e');
       _useLocalFallback = true;
       return null;
     }
@@ -106,8 +106,8 @@ class DatabaseHelper {
     });
   }
 
-  // CREATE
-  Future<int> createWorkout(WorkoutItem item) async {
+  // TẠO BÀI TẬP MỚI
+  Future<int> createWorkout(BaiTapItem item) async {
     try {
       final db = await database;
       if (db != null) {
@@ -115,12 +115,12 @@ class DatabaseHelper {
         return newId;
       }
     } catch (e) {
-      debugPrint('SQLite createWorkout error, falling back to local list: $e');
+      debugPrint('Lỗi SQLite createWorkout, chuyển sang danh sách bộ nhớ: $e');
       _useLocalFallback = true;
     }
 
     final newId = _localNextId++;
-    final newItem = WorkoutItem(
+    final newItem = BaiTapItem(
       id: newId,
       name: item.name,
       sets: item.sets,
@@ -132,23 +132,23 @@ class DatabaseHelper {
     return newId;
   }
 
-  // READ
-  Future<List<WorkoutItem>> readAllWorkouts() async {
+  // ĐỌC DANH SÁCH BÀI TẬP
+  Future<List<BaiTapItem>> readAllWorkouts() async {
     try {
       final db = await database;
       if (db != null) {
         final result = await db.query('workouts', orderBy: 'id DESC');
-        return result.map((row) => WorkoutItem.fromMap(row)).toList();
+        return result.map((row) => BaiTapItem.fromMap(row)).toList();
       }
     } catch (e) {
-      debugPrint('SQLite readAllWorkouts error, falling back to local list: $e');
+      debugPrint('Lỗi SQLite readAllWorkouts, chuyển sang danh sách bộ nhớ: $e');
       _useLocalFallback = true;
     }
-    return List<WorkoutItem>.from(_localWorkouts);
+    return List<BaiTapItem>.from(_localWorkouts);
   }
 
-  // UPDATE
-  Future<int> updateWorkout(WorkoutItem item) async {
+  // CẬP NHẬT BÀI TẬP
+  Future<int> updateWorkout(BaiTapItem item) async {
     try {
       final db = await database;
       if (db != null && item.id != null) {
@@ -160,7 +160,7 @@ class DatabaseHelper {
         );
       }
     } catch (e) {
-      debugPrint('SQLite updateWorkout error, falling back to local list: $e');
+      debugPrint('Lỗi SQLite updateWorkout, chuyển sang danh sách bộ nhớ: $e');
       _useLocalFallback = true;
     }
 
@@ -172,7 +172,7 @@ class DatabaseHelper {
     return 0;
   }
 
-  // DELETE
+  // XÓA BÀI TẬP
   Future<int> deleteWorkout(int id) async {
     try {
       final db = await database;
@@ -184,7 +184,7 @@ class DatabaseHelper {
         );
       }
     } catch (e) {
-      debugPrint('SQLite deleteWorkout error, falling back to local list: $e');
+      debugPrint('Lỗi SQLite deleteWorkout, chuyển sang danh sách bộ nhớ: $e');
       _useLocalFallback = true;
     }
 
@@ -192,3 +192,6 @@ class DatabaseHelper {
     return 1;
   }
 }
+
+// Tên tương thích cũ
+typedef DatabaseHelper = CoSoDuLieuHelper;

@@ -1,4 +1,4 @@
-class WorkoutItem {
+class BaiTapItem {
   final int? id;
   final String name;
   final int sets;
@@ -6,7 +6,7 @@ class WorkoutItem {
   final int calories;
   final String createdAt;
 
-  WorkoutItem({
+  BaiTapItem({
     this.id,
     required this.name,
     required this.sets,
@@ -29,8 +29,8 @@ class WorkoutItem {
     return map;
   }
 
-  factory WorkoutItem.fromMap(Map<String, dynamic> map) {
-    return WorkoutItem(
+  factory BaiTapItem.fromMap(Map<String, dynamic> map) {
+    return BaiTapItem(
       id: map['id'] as int?,
       name: map['name'] as String,
       sets: map['sets'] as int,
@@ -41,7 +41,10 @@ class WorkoutItem {
   }
 }
 
-class FoodCalorieItem {
+// Tên tương thích cũ
+typedef WorkoutItem = BaiTapItem;
+
+class MonAnCaloItem {
   final int id;
   final String name;
   final int caloriesPerServing;
@@ -50,7 +53,7 @@ class FoodCalorieItem {
   final String cuisine;
   final String image;
 
-  FoodCalorieItem({
+  MonAnCaloItem({
     required this.id,
     required this.name,
     required this.caloriesPerServing,
@@ -60,8 +63,8 @@ class FoodCalorieItem {
     required this.image,
   });
 
-  factory FoodCalorieItem.fromJson(Map<String, dynamic> json) {
-    return FoodCalorieItem(
+  factory MonAnCaloItem.fromJson(Map<String, dynamic> json) {
+    return MonAnCaloItem(
       id: (json['id'] as num?)?.toInt() ?? 0,
       name: json['name']?.toString() ?? 'Món ăn dinh dưỡng',
       caloriesPerServing: (json['caloriesPerServing'] as num?)?.toInt() ?? 250,
@@ -73,14 +76,17 @@ class FoodCalorieItem {
   }
 }
 
-class BmiRecord {
+// Tên tương thích cũ
+typedef FoodCalorieItem = MonAnCaloItem;
+
+class BanGhiBmi {
   final double bmi;
   final String status;
   final double heightCm;
   final double weightKg;
   final String timestamp;
 
-  BmiRecord({
+  BanGhiBmi({
     required this.bmi,
     required this.status,
     required this.heightCm,
@@ -98,8 +104,8 @@ class BmiRecord {
     };
   }
 
-  factory BmiRecord.fromMap(Map<String, dynamic> map) {
-    return BmiRecord(
+  factory BanGhiBmi.fromMap(Map<String, dynamic> map) {
+    return BanGhiBmi(
       bmi: (map['bmi'] as num?)?.toDouble() ?? 0.0,
       status: map['status']?.toString() ?? '',
       heightCm: (map['heightCm'] as num?)?.toDouble() ?? 0.0,
@@ -108,3 +114,6 @@ class BmiRecord {
     );
   }
 }
+
+// Tên tương thích cũ
+typedef BmiRecord = BanGhiBmi;

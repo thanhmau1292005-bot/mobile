@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ThemeProvider extends ChangeNotifier {
+class GiaoDienProvider extends ChangeNotifier {
   bool _isDarkMode = false;
 
   bool get isDarkMode => _isDarkMode;
@@ -12,3 +12,6 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+// Tên tương thích cũ
+typedef ThemeProvider = GiaoDienProvider;

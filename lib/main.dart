@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/theme_provider.dart';
-import 'screens/main_screen.dart';
+import 'providers/giao_dien_provider.dart';
+import 'screens/man_hinh_chinh.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+      create: (_) => GiaoDienProvider(),
       child: const HealthBmiTrackerApp(),
     ),
   );
@@ -19,7 +19,7 @@ class HealthBmiTrackerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.watch<ThemeProvider>();
+    final themeProvider = context.watch<GiaoDienProvider>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -41,7 +41,7 @@ class HealthBmiTrackerApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const MainScreen(),
+      home: const ManHinhChinh(),
     );
   }
 }

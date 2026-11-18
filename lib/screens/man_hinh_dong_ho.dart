@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key});
+class ManHinhDongHo extends StatefulWidget {
+  const ManHinhDongHo({super.key});
 
   @override
-  State<TimerScreen> createState() => _TimerScreenState();
+  State<ManHinhDongHo> createState() => _ManHinhDongHoState();
 }
 
-class _TimerScreenState extends State<TimerScreen> {
+// Tên tương thích cũ
+typedef TimerScreen = ManHinhDongHo;
+
+class _ManHinhDongHoState extends State<ManHinhDongHo> {
   int _secondsLeft = 60;
   int _initialSeconds = 60;
   Timer? _timer;

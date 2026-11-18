@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart';
-import 'bmi_screen.dart';
-import 'workout_screen.dart';
-import 'timer_screen.dart';
-import 'calorie_screen.dart';
+import '../providers/giao_dien_provider.dart';
+import 'man_hinh_bmi.dart';
+import 'man_hinh_nhat_ky_tap.dart';
+import 'man_hinh_dong_ho.dart';
+import 'man_hinh_calo.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class ManHinhChinh extends StatefulWidget {
+  const ManHinhChinh({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<ManHinhChinh> createState() => _ManHinhChinhState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+// Tên tương thích cũ
+typedef MainScreen = ManHinhChinh;
+
+class _ManHinhChinhState extends State<ManHinhChinh> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    BmiScreen(),
-    WorkoutScreen(),
-    TimerScreen(),
-    CalorieScreen(),
+    ManHinhBmi(),
+    ManHinhNhatKyTap(),
+    ManHinhDongHo(),
+    ManHinhCalo(),
   ];
 
   final List<String> _titles = const [
@@ -32,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProv = context.watch<ThemeProvider>();
+    final themeProv = context.watch<GiaoDienProvider>();
 
     return Scaffold(
       appBar: AppBar(

@@ -2,31 +2,34 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../models/workout_model.dart';
-import '../services/api_service.dart';
+import '../models/mo_hinh_tap_luyen.dart';
+import '../services/dich_vu_api.dart';
 
-class CalorieScreen extends StatefulWidget {
-  const CalorieScreen({super.key});
+class ManHinhCalo extends StatefulWidget {
+  const ManHinhCalo({super.key});
 
   @override
-  State<CalorieScreen> createState() => _CalorieScreenState();
+  State<ManHinhCalo> createState() => _ManHinhCaloState();
 }
 
-class _CalorieScreenState extends State<CalorieScreen> {
+// Tên tương thích cũ
+typedef CalorieScreen = ManHinhCalo;
+
+class _ManHinhCaloState extends State<ManHinhCalo> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
-  late Future<List<FoodCalorieItem>> _foodsFuture;
+  late Future<List<MonAnCaloItem>> _foodsFuture;
   int _plannedCaloriesToday = 0;
 
   @override
   void initState() {
     super.initState();
-    _foodsFuture = ApiService.fetchFoodCalories();
+    _foodsFuture = DichVuApi.fetchFoodCalories();
   }
 
   void _triggerSearch() {
     setState(() {
-      _foodsFuture = ApiService.fetchFoodCalories(
+      _foodsFuture = DichVuApi.fetchFoodCalories(
         query: _searchController.text,
       );
     });
@@ -52,12 +55,12 @@ class _CalorieScreenState extends State<CalorieScreen> {
     }
   }
 
-  Future<void> _addMealToPlan(FoodCalorieItem food) async {
+  Future<void> _addMealToPlan(MonAnCaloItem food) async {
     setState(() {
       _plannedCaloriesToday += food.caloriesPerServing;
     });
     try {
-      await ApiService.addFoodToMealPlanServer(food);
+      await DichVuApi.addFoodToMealPlanServer(food);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -198,7 +201,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // Ghi chú & Nút tìm kiếm Google Calo theo yêu cầu
+                    // Ghi chú & Nút tìm kiếm Google Calo
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -304,7 +307,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                       ),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
-                        final newItem = FoodCalorieItem(
+                        final newItem = MonAnCaloItem(
                           id: DateTime.now().millisecondsSinceEpoch,
                           name: nameCtrl.text.trim(),
                           caloriesPerServing: int.parse(calCtrl.text.trim()),
@@ -315,7 +318,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                               : cuisineCtrl.text.trim(),
                           image: pickedImagePath ?? '',
                         );
-                        ApiService.addCustomFood(newItem);
+                        DichVuApi.addCustomFood(newItem);
                         Navigator.pop(ctx);
                         _triggerSearch();
                         if (mounted) {
@@ -347,7 +350,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
     );
   }
 
-  void _deleteCustomFood(FoodCalorieItem food) {
+  void _deleteCustomFood(MonAnCaloItem food) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -365,7 +368,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
             ),
             onPressed: () {
               Navigator.pop(ctx);
-              ApiService.deleteCustomFood(food.id);
+              DichVuApi.deleteCustomFood(food.id);
               _triggerSearch();
             },
             child: const Text('Xóa'),
@@ -550,7 +553,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
   }
 
   Widget _buildFoodGrid({required bool isLandscape}) {
-    return FutureBuilder<List<FoodCalorieItem>>(
+    return FutureBuilder<List<MonAnCaloItem>>(
       future: _foodsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -566,7 +569,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                   const Icon(Icons.wifi_off, size: 48, color: Colors.grey),
                   const SizedBox(height: 8),
                   Text(
-                    'Không thể tải dữ liệu REST API:\n${snapshot.error}',
+                    'Không thể tải dữ liệu API:\n${snapshot.error}',
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
